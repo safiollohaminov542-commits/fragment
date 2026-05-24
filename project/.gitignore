@@ -15,6 +15,8 @@ env/
 app/sessions/
 app/logs/
 app/bots_registry.json
+app/panel.db
+app/panel.db-journal
 
 # Generated bot directories (each <bot_id>/ subdir under app/users/)
 app/users/*/

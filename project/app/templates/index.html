@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
-  /* ===== Reset & base ===== */
+  /* ===== Reset ===== */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     --bg: #ececec;
@@ -23,6 +23,8 @@
     --pending: #fdecd2;
     --pending-text: #b6731c;
     --danger: #e35d5d;
+    --info: #2c6cb0;
+    --info-soft: #eaf3fb;
     --radius: 18px;
     --radius-sm: 12px;
     --shadow: 0 1px 0 rgba(0,0,0,0.02), 0 8px 24px -12px rgba(20,92,57,0.08);
@@ -39,33 +41,31 @@
   /* ===== Layout ===== */
   .shell {
     display: grid;
-    grid-template-columns: 260px 1fr;
+    grid-template-columns: 240px 1fr;
     min-height: 100vh;
-    padding: 18px;
-    gap: 18px;
+    padding: 16px;
+    gap: 16px;
   }
 
   /* ===== Sidebar ===== */
   .sidebar {
     background: var(--panel);
     border-radius: 22px;
-    padding: 22px 18px;
+    padding: 20px 14px;
     display: flex;
     flex-direction: column;
     box-shadow: var(--shadow);
   }
   .brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 6px 8px 22px 8px;
+    display: flex; align-items: center; gap: 10px;
+    padding: 4px 8px 22px 8px;
   }
   .brand-logo {
     width: 34px; height: 34px;
     background: var(--green);
     border-radius: 10px;
     display: grid; place-items: center;
-    color: #fff; font-weight: 800;
+    color: #fff;
   }
   .brand-name { font-weight: 800; font-size: 19px; letter-spacing: -0.3px; }
   .nav-label {
@@ -86,6 +86,10 @@
     margin-bottom: 2px;
     position: relative;
     user-select: none;
+    border: none; background: transparent;
+    width: 100%;
+    text-align: left;
+    font-size: 14px;
   }
   .nav-item:hover { background: #f7f7f6; }
   .nav-item.active {
@@ -94,10 +98,9 @@
     font-weight: 600;
   }
   .nav-item.active::before {
-    content: ""; position: absolute; left: -18px; top: 8px; bottom: 8px;
+    content: ""; position: absolute; left: -14px; top: 8px; bottom: 8px;
     width: 4px; border-radius: 0 4px 4px 0; background: var(--green);
   }
-  .nav-item .ico { width: 18px; height: 18px; flex: 0 0 18px; opacity: 0.85; }
   .nav-badge {
     margin-left: auto;
     background: var(--green-soft);
@@ -105,53 +108,39 @@
     font-size: 11px;
     font-weight: 700;
     padding: 2px 8px; border-radius: 999px;
+    min-width: 22px; text-align: center;
   }
-  .promo {
+  .sidebar-footer {
     margin-top: auto;
-    background: linear-gradient(135deg, #145c39, #1f7a4d 60%, #2e9963);
-    color: #fff;
-    border-radius: 18px;
-    padding: 18px;
-    position: relative; overflow: hidden;
+    padding: 12px;
+    background: var(--green-light);
+    border-radius: 14px;
+    text-align: center;
   }
-  .promo::before, .promo::after {
-    content: ""; position: absolute; border-radius: 50%;
-    background: rgba(255,255,255,0.08);
+  .sidebar-footer .who {
+    font-size: 12px; color: var(--green-dark); font-weight: 600;
   }
-  .promo::before { width: 140px; height: 140px; right: -50px; bottom: -60px; }
-  .promo::after { width: 80px; height: 80px; right: 30px; top: -30px; }
-  .promo .icn {
-    width: 28px; height: 28px; border-radius: 8px;
-    background: rgba(255,255,255,0.2); display: grid; place-items: center;
-    margin-bottom: 10px;
+  .sidebar-footer .lo {
+    margin-top: 8px;
+    color: var(--danger); cursor: pointer;
+    font-size: 12px; font-weight: 600;
+    display: inline-block;
   }
-  .promo h4 { font-size: 14px; font-weight: 700; line-height: 1.3; }
-  .promo p { opacity: 0.85; font-size: 12px; margin-top: 4px; }
-  .promo button {
-    margin-top: 12px;
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.3);
-    color: #fff;
-    padding: 8px 14px; border-radius: 999px;
-    font-weight: 600; cursor: pointer;
-    backdrop-filter: blur(4px);
-  }
-  .promo button:hover { background: rgba(255,255,255,0.25); }
 
   /* ===== Main ===== */
   .main {
-    display: flex; flex-direction: column; gap: 18px;
+    display: flex; flex-direction: column; gap: 16px;
     min-width: 0;
   }
   .topbar {
-    display: flex; align-items: center; gap: 14px;
+    display: flex; align-items: center; gap: 12px;
     background: var(--panel);
     border-radius: 16px;
-    padding: 10px 14px;
+    padding: 8px 14px;
     box-shadow: var(--shadow);
   }
   .search {
-    flex: 1; max-width: 420px;
+    flex: 1; max-width: 460px;
     display: flex; align-items: center; gap: 10px;
     background: #f5f5f4;
     border-radius: 12px;
@@ -166,32 +155,9 @@
     background: #fff; padding: 2px 8px; border-radius: 6px;
     border: 1px solid var(--line);
   }
-  .top-actions { margin-left: auto; display: flex; align-items: center; gap: 10px; }
-  .icon-btn {
-    width: 38px; height: 38px;
-    background: #f5f5f4;
-    border: none; border-radius: 12px;
-    display: grid; place-items: center;
-    cursor: pointer; color: #555;
-  }
-  .icon-btn:hover { background: #ececea; }
-  .user-chip {
-    display: flex; align-items: center; gap: 10px;
-    padding: 4px 12px 4px 4px;
-    border-radius: 999px;
-    background: #f5f5f4;
-  }
-  .user-avatar {
-    width: 34px; height: 34px; border-radius: 50%;
-    background: linear-gradient(135deg,#ffd6a8,#f4a05c);
-    display: grid; place-items: center; color: #5a3818;
-    font-weight: 700;
-  }
-  .user-meta { line-height: 1.15; }
-  .user-meta b { font-weight: 600; font-size: 13px; }
-  .user-meta span { font-size: 11px; color: var(--muted); }
+  .top-actions { margin-left: auto; display: flex; gap: 10px; }
 
-  /* ===== Page header ===== */
+  /* ===== Page head ===== */
   .page-head {
     display: flex; align-items: flex-end; justify-content: space-between;
     flex-wrap: wrap; gap: 12px;
@@ -200,12 +166,15 @@
   .page-title { font-size: 26px; font-weight: 700; letter-spacing: -0.4px; }
   .page-sub { color: var(--muted); margin-top: 4px; font-size: 13px; }
   .head-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  /* ===== Buttons ===== */
   .btn {
     border: none; cursor: pointer;
     font: inherit; font-weight: 600;
     padding: 11px 18px; border-radius: 999px;
     display: inline-flex; align-items: center; gap: 8px;
     transition: transform .05s ease, background .15s ease;
+    white-space: nowrap;
   }
   .btn:active { transform: translateY(1px); }
   .btn-primary { background: var(--green); color: #fff; }
@@ -218,8 +187,12 @@
   .btn-sm { padding: 7px 12px; font-size: 12px; }
   .btn-danger { background: #fff; color: var(--danger); border: 1px solid #f1cfcf; }
   .btn-danger:hover { background: #fdf3f3; }
+  .btn-warn { background: #fff7e6; color: #b6731c; border: 1px solid #f3dfa9; }
+  .btn-warn:hover { background: #fdedcc; }
+  .btn-info { background: var(--info-soft); color: var(--info); border: 1px solid #d3e3f5; }
+  .btn-info:hover { background: #d8e8f7; }
 
-  /* ===== Stat cards ===== */
+  /* ===== Stats ===== */
   .stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -228,22 +201,13 @@
   .stat-card {
     background: var(--panel);
     border-radius: var(--radius);
-    padding: 18px;
-    position: relative;
+    padding: 20px;
     box-shadow: var(--shadow);
   }
   .stat-card.green {
     background: var(--green);
     color: #fff;
   }
-  .stat-card .arrow {
-    position: absolute; top: 14px; right: 14px;
-    width: 30px; height: 30px;
-    border-radius: 50%;
-    background: #f5f5f4; color: #555;
-    display: grid; place-items: center;
-  }
-  .stat-card.green .arrow { background: rgba(255,255,255,0.18); color: #fff; }
   .stat-card .label {
     font-size: 13px; font-weight: 600;
     color: var(--muted);
@@ -251,7 +215,7 @@
   .stat-card.green .label { color: rgba(255,255,255,0.85); }
   .stat-card .value {
     font-size: 38px; font-weight: 700; letter-spacing: -1px;
-    margin-top: 6px;
+    margin-top: 4px;
   }
   .stat-card .delta {
     margin-top: 10px;
@@ -259,28 +223,23 @@
     font-size: 11px; font-weight: 600;
     background: #f5f5f4;
     color: #555;
-    padding: 4px 8px; border-radius: 999px;
+    padding: 4px 10px; border-radius: 999px;
   }
   .stat-card.green .delta { background: rgba(255,255,255,0.18); color: #fff; }
 
-  /* ===== Content grid ===== */
-  .content-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 14px;
-  }
+  /* ===== Panels ===== */
   .panel {
     background: var(--panel);
     border-radius: var(--radius);
-    padding: 18px;
+    padding: 20px;
     box-shadow: var(--shadow);
   }
   .panel-head {
     display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 14px;
+    flex-wrap: wrap; gap: 10px;
   }
   .panel-title { font-size: 16px; font-weight: 700; }
-  .panel-link { color: var(--green); font-size: 12px; font-weight: 600; cursor: pointer; }
 
   /* ===== Bot list ===== */
   .bot-list { display: flex; flex-direction: column; gap: 10px; }
@@ -296,17 +255,31 @@
   }
   .bot-card:hover { border-color: #d6e7dd; background: #fbfdfb; }
   .bot-avatar {
-    width: 42px; height: 42px; border-radius: 12px;
+    width: 44px; height: 44px; border-radius: 12px;
     background: var(--green-soft); color: var(--green-dark);
     display: grid; place-items: center;
-    font-weight: 700;
+    font-weight: 700; font-size: 16px;
   }
-  .bot-info b { font-weight: 600; font-size: 14px; display: block; }
-  .bot-info small { color: var(--muted); font-size: 12px; }
+  .bot-name {
+    display: flex; align-items: center; gap: 8px;
+    font-weight: 600; font-size: 14px;
+  }
+  .bot-meta {
+    display: flex; flex-wrap: wrap; gap: 6px 14px;
+    margin-top: 4px;
+    color: var(--muted); font-size: 12px;
+  }
+  .bot-meta span { display: inline-flex; align-items: center; gap: 4px; }
+  .bot-meta .uptime {
+    color: var(--green-dark); font-weight: 600;
+    background: var(--green-soft);
+    padding: 2px 8px; border-radius: 999px;
+  }
   .bot-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+
   .pill {
     font-size: 11px; font-weight: 600;
-    padding: 4px 10px; border-radius: 999px;
+    padding: 3px 10px; border-radius: 999px;
     display: inline-flex; align-items: center; gap: 6px;
   }
   .pill::before {
@@ -314,37 +287,25 @@
     background: currentColor;
   }
   .pill-running { background: #e8f3ed; color: #1f7a4d; }
+  .pill-running::before { animation: pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
   .pill-stopped { background: #f1f1f1; color: #757575; }
   .pill-pending { background: var(--pending); color: var(--pending-text); }
-  .pill-error   { background: #fdecec; color: #c14545; }
 
   .empty {
-    text-align: center; padding: 40px 20px;
+    text-align: center; padding: 60px 20px;
     color: var(--muted); font-size: 13px;
   }
   .empty .em-ico {
-    width: 56px; height: 56px; border-radius: 50%;
+    width: 64px; height: 64px; border-radius: 50%;
     background: var(--green-light);
     display: grid; place-items: center;
     margin: 0 auto 12px;
     color: var(--green);
   }
-
-  /* ===== Side panel (project list) ===== */
-  .mini-list { display: flex; flex-direction: column; gap: 12px; }
-  .mini-row {
-    display: flex; align-items: center; gap: 12px;
-    padding: 8px 6px;
-    border-radius: 10px;
-  }
-  .mini-row:hover { background: #fafafa; }
-  .mini-avatar {
-    width: 28px; height: 28px; border-radius: 8px;
-    display: grid; place-items: center;
-    font-weight: 700; font-size: 11px;
-  }
-  .mini-row b { font-size: 13px; font-weight: 600; }
-  .mini-row small { color: var(--muted); font-size: 11px; }
 
   /* ===== Modal ===== */
   .modal-bg {
@@ -364,7 +325,9 @@
     padding: 26px;
     box-shadow: 0 30px 80px -20px rgba(0,0,0,0.3);
     animation: pop .18s ease;
+    max-height: 90vh; overflow-y: auto;
   }
+  .modal-lg { max-width: 760px; }
   @keyframes pop {
     from { transform: translateY(8px) scale(.98); opacity: 0; }
     to   { transform: translateY(0) scale(1); opacity: 1; }
@@ -385,7 +348,7 @@
     border: 1px solid var(--line);
     background: #fafafa;
     border-radius: 12px;
-    outline: none; transition: border .15s ease, background .15s ease;
+    outline: none; transition: all .15s ease;
   }
   .form-row input:focus {
     border-color: var(--green);
@@ -395,7 +358,6 @@
   .form-row .hint {
     font-size: 11px; color: var(--muted); margin-top: 4px;
   }
-  .form-row.error input { border-color: var(--danger); }
   .form-actions {
     display: flex; gap: 10px; justify-content: flex-end;
     margin-top: 8px;
@@ -407,9 +369,8 @@
   }
   .alert.show { display: block; }
   .alert-error { background: #fdecec; color: #c14545; }
-  .alert-info  { background: #eaf3fb; color: #2c6cb0; }
+  .alert-info  { background: var(--info-soft); color: var(--info); }
 
-  /* Stepper */
   .stepper {
     display: flex; align-items: center; gap: 6px;
     margin-bottom: 18px;
@@ -417,11 +378,11 @@
   .step {
     flex: 1; height: 4px; border-radius: 4px;
     background: #ececec;
+    transition: background .25s ease;
   }
   .step.done { background: var(--green); }
   .step.active { background: var(--green); opacity: 0.55; }
 
-  /* Loader */
   .spin {
     width: 14px; height: 14px;
     border: 2px solid rgba(255,255,255,0.4);
@@ -433,8 +394,7 @@
   .btn-ghost .spin { border-color: rgba(0,0,0,0.15); border-top-color: var(--text); }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* Logs modal */
-  .modal-lg { max-width: 720px; }
+  /* ===== Logs ===== */
   .log-box {
     background: #0e1611;
     color: #c9e4d4;
@@ -443,13 +403,39 @@
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 12px;
     line-height: 1.5;
-    height: 360px;
+    height: 420px;
     overflow: auto;
     white-space: pre-wrap;
     word-break: break-word;
   }
 
-  /* Toast */
+  /* ===== Files ===== */
+  .file-section { margin-bottom: 22px; }
+  .file-section h4 {
+    font-size: 13px; font-weight: 700;
+    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+    color: var(--green-dark);
+  }
+  .file-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px;
+  }
+  .file-table th, .file-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+  }
+  .file-table th {
+    color: var(--muted); font-weight: 600;
+    font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .file-table tbody tr:hover { background: #fafafa; }
+  .file-table .name { font-family: ui-monospace, monospace; font-size: 12px; }
+  .file-table .size { color: var(--muted); white-space: nowrap; }
+
+  /* ===== Toasts ===== */
   .toasts {
     position: fixed; right: 20px; bottom: 20px;
     display: flex; flex-direction: column; gap: 10px;
@@ -468,19 +454,40 @@
   .toast.error { border-left-color: var(--danger); }
   @keyframes slide { from { transform: translateX(20px); opacity: 0; } to { transform: none; opacity: 1; } }
 
-  /* Responsive */
+  /* ===== Views (tabs) ===== */
+  .view { display: none; }
+  .view.active { display: flex; flex-direction: column; gap: 16px; }
+
+  /* ===== Audit ===== */
+  .audit-list { font-size: 12px; }
+  .audit-row {
+    display: grid;
+    grid-template-columns: 130px 110px 1fr;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f5f5f4;
+  }
+  .audit-row .ts { color: var(--muted); font-family: ui-monospace, monospace; font-size: 11px; }
+  .audit-row .act {
+    background: var(--green-soft); color: var(--green-dark);
+    padding: 2px 8px; border-radius: 6px;
+    font-weight: 600; font-size: 11px;
+    width: fit-content;
+  }
+
+  /* ===== Responsive ===== */
   @media (max-width: 1100px) {
     .stats { grid-template-columns: repeat(2, 1fr); }
-    .content-grid { grid-template-columns: 1fr; }
   }
   @media (max-width: 760px) {
     .shell { grid-template-columns: 1fr; padding: 10px; }
     .sidebar { display: none; }
     .stats { grid-template-columns: repeat(2, 1fr); }
+    .bot-card { grid-template-columns: auto 1fr; }
+    .bot-actions { grid-column: 1 / -1; justify-content: flex-start; }
   }
 
-  /* Icons */
-  .ico, svg.ico { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .ico { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 </style>
 </head>
 <body>
@@ -496,48 +503,26 @@
     </div>
 
     <div class="nav-label">Меню</div>
-    <div class="nav-item active">
+    <button class="nav-item active" data-view="dashboard">
       <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
       Dashboard
-    </div>
-    <div class="nav-item">
+    </button>
+    <button class="nav-item" data-view="bots">
       <svg class="ico" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h7"/></svg>
-      Tasks <span class="nav-badge" id="navBadge">0</span>
-    </div>
-    <div class="nav-item">
-      <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-      Calendar
-    </div>
-    <div class="nav-item">
-      <svg class="ico" viewBox="0 0 24 24"><path d="M3 21V10M9 21V4M15 21v-8M21 21V14"/></svg>
-      Analytics
-    </div>
-    <div class="nav-item">
-      <svg class="ico" viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/><circle cx="17" cy="9" r="2.5"/><path d="M21 21v-1.5a3.5 3.5 0 00-3.5-3.5"/></svg>
-      Team
-    </div>
+      Ботҳо <span class="nav-badge" id="navBadge">0</span>
+    </button>
+    <button class="nav-item" data-view="files">
+      <svg class="ico" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+      Файлҳо ва сессияҳо
+    </button>
+    <button class="nav-item" data-view="audit">
+      <svg class="ico" viewBox="0 0 24 24"><path d="M3 12a9 9 0 109-9"/><path d="M3 4v5h5M12 7v5l3 2"/></svg>
+      Таърих
+    </button>
 
-    <div class="nav-label" style="margin-top: 18px;">General</div>
-    <div class="nav-item">
-      <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.34 1.87l.06.06a2 2 0 11-2.83 2.83l-.06-.06A1.7 1.7 0 0015 19.4a1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1A1.7 1.7 0 009 19.4a1.7 1.7 0 00-1.87.34l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.7 1.7 0 004.6 15a1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1A1.7 1.7 0 004.6 9a1.7 1.7 0 00-.34-1.87l-.06-.06a2 2 0 112.83-2.83l.06.06A1.7 1.7 0 009 4.6a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1A1.7 1.7 0 0015 4.6a1.7 1.7 0 001.87-.34l.06-.06a2 2 0 112.83 2.83l-.06.06A1.7 1.7 0 0019.4 9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>
-      Settings
-    </div>
-    <div class="nav-item">
-      <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 015.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-      Help
-    </div>
-    <div class="nav-item">
-      <svg class="ico" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
-      Logout
-    </div>
-
-    <div class="promo">
-      <div class="icn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18v-6M9 15l3 3 3-3M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-      </div>
-      <h4>Userbot SDK<br/>барои дӯстон</h4>
-      <p>Ҳамон ботро ба одамон осон диҳед.</p>
-      <button onclick="document.getElementById('createModal').classList.add('open')">Сохтан</button>
+    <div class="sidebar-footer">
+      <div class="who">👤 {{ admin_login }}</div>
+      <a class="lo" href="/logout">Баромадан →</a>
     </div>
   </aside>
 
@@ -547,112 +532,115 @@
     <div class="topbar">
       <div class="search">
         <svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input id="searchInput" placeholder="Ҷустуҷӯи бот..." />
+        <input id="searchInput" placeholder="Ҷустуҷӯ..." />
         <span class="kbd">⌘ F</span>
       </div>
       <div class="top-actions">
-        <button class="icon-btn" title="Mail">
-          <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-        </button>
-        <button class="icon-btn" title="Notifications">
-          <svg class="ico" viewBox="0 0 24 24"><path d="M18 16v-5a6 6 0 10-12 0v5l-2 2h16l-2-2z"/><path d="M10 21h4"/></svg>
-        </button>
-        <div class="user-chip">
-          <div class="user-avatar">TM</div>
-          <div class="user-meta">
-            <b>Totok Michael</b><br/>
-            <span>tmichael20@mail.com</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Page head -->
-    <div class="page-head">
-      <div>
-        <div class="page-title">Dashboard</div>
-        <div class="page-sub">Userbot-ҳои худро идора кунед, осон ва зебо.</div>
-      </div>
-      <div class="head-actions">
         <button class="btn btn-primary" onclick="openCreate()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
           Иловаи бот
         </button>
-        <button class="btn btn-ghost" onclick="refreshAll()">
+        <button class="btn btn-ghost" onclick="refreshAll()" title="Нав кардан">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0115.5-6.36L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-15.5 6.36L3 16"/><path d="M3 21v-5h5"/></svg>
-          Нав кардан
         </button>
       </div>
     </div>
 
-    <!-- Stats -->
-    <div class="stats">
-      <div class="stat-card green">
-        <button class="arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></button>
-        <div class="label">Ҳамаи ботҳо</div>
-        <div class="value" id="statTotal">0</div>
-        <div class="delta">📈 Иловашуда</div>
+    <!-- ====================== Dashboard view ====================== -->
+    <section class="view active" id="view-dashboard">
+      <div class="page-head">
+        <div>
+          <div class="page-title">Dashboard</div>
+          <div class="page-sub">Тавсифи умумии userbot-ҳо.</div>
+        </div>
       </div>
-      <div class="stat-card">
-        <button class="arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></button>
-        <div class="label">Боздошташуда</div>
-        <div class="value" id="statStopped">0</div>
-        <div class="delta">⏸ Холати ҳозира</div>
-      </div>
-      <div class="stat-card">
-        <button class="arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></button>
-        <div class="label">Кор мекунанд</div>
-        <div class="value" id="statRunning">0</div>
-        <div class="delta">▶ Фаъол</div>
-      </div>
-      <div class="stat-card">
-        <button class="arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></button>
-        <div class="label">Дар интизор</div>
-        <div class="value" id="statPending">0</div>
-        <div class="delta">⌛ Login дар ҷараён</div>
-      </div>
-    </div>
 
-    <!-- Content grid -->
-    <div class="content-grid">
-      <!-- Bot list -->
+      <div class="stats">
+        <div class="stat-card green">
+          <div class="label">Ҳамаи ботҳо</div>
+          <div class="value" id="statTotal">0</div>
+          <div class="delta">📦 Дар реестр</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Кор мекунанд</div>
+          <div class="value" id="statRunning">0</div>
+          <div class="delta">▶ Фаъол</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Боздошташуда</div>
+          <div class="value" id="statStopped">0</div>
+          <div class="delta">⏸ Холати ҳозира</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Дар интизор</div>
+          <div class="value" id="statPending">0</div>
+          <div class="delta">⌛ Login дар ҷараён</div>
+        </div>
+      </div>
+
       <section class="panel">
         <div class="panel-head">
-          <div class="panel-title">Ботҳо</div>
-          <span class="panel-link" onclick="refreshAll()">Нав кардан</span>
+          <div class="panel-title">Ботҳои фаъол</div>
+          <button class="btn btn-ghost btn-sm" onclick="switchView('bots')">Ҳамаашро бубинед →</button>
         </div>
+        <div class="bot-list" id="dashBotList"></div>
+      </section>
+    </section>
+
+    <!-- ====================== Bots view ====================== -->
+    <section class="view" id="view-bots">
+      <div class="page-head">
+        <div>
+          <div class="page-title">Ботҳо</div>
+          <div class="page-sub">Идоракунии комил: Start / Stop / Edit / Delete.</div>
+        </div>
+      </div>
+
+      <section class="panel">
         <div class="bot-list" id="botList"></div>
       </section>
+    </section>
 
-      <!-- Side info -->
-      <section class="panel">
-        <div class="panel-head">
-          <div class="panel-title">Чӣ тавр кор мекунад?</div>
+    <!-- ====================== Files view ====================== -->
+    <section class="view" id="view-files">
+      <div class="page-head">
+        <div>
+          <div class="page-title">Файлҳо ва сессияҳо</div>
+          <div class="page-sub">Ҳамаи файлҳои ҳар як бот ва сессияҳои Telegram.</div>
         </div>
-        <div class="mini-list">
-          <div class="mini-row">
-            <div class="mini-avatar" style="background:#e8f3ed;color:#1f7a4d;">1</div>
-            <div><b>api_id ва api_hash</b><br/><small>Аз my.telegram.org гиред</small></div>
-          </div>
-          <div class="mini-row">
-            <div class="mini-avatar" style="background:#fff1d6;color:#b6731c;">2</div>
-            <div><b>Рақами телефон</b><br/><small>+992... ё +7...</small></div>
-          </div>
-          <div class="mini-row">
-            <div class="mini-avatar" style="background:#e8eef9;color:#2c6cb0;">3</div>
-            <div><b>Коди тасдиқ</b><br/><small>Telegram коди 6-ракамаро мефиристад</small></div>
-          </div>
-          <div class="mini-row">
-            <div class="mini-avatar" style="background:#fde8ec;color:#c14545;">4</div>
-            <div><b>Парол (агар бошад)</b><br/><small>2FA пуррасозӣ</small></div>
-          </div>
-          <div class="mini-row">
-            <div class="mini-avatar" style="background:#e8f3ed;color:#1f7a4d;">✓</div>
-            <div><b>Бот автомати оғоз мешавад</b><br/><small>main.py сохта ва иҷро мегардад</small></div>
+        <div class="head-actions">
+          <button class="btn btn-ghost btn-sm" onclick="loadFiles()">Нав кардан</button>
+        </div>
+      </div>
+      <section class="panel">
+        <div id="filesContent">
+          <div class="empty">
+            <div class="em-ico">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+            </div>
+            Загрузка...
           </div>
         </div>
       </section>
-    </div>
+    </section>
+
+    <!-- ====================== Audit view ====================== -->
+    <section class="view" id="view-audit">
+      <div class="page-head">
+        <div>
+          <div class="page-title">Таърихи амалҳо</div>
+          <div class="page-sub">50-тои охирин.</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-ghost btn-sm" onclick="loadAudit()">Нав кардан</button>
+        </div>
+      </div>
+      <section class="panel">
+        <div class="audit-list" id="auditList">
+          <div class="empty"><div class="em-ico">📜</div>Загрузка...</div>
+        </div>
+      </section>
+    </section>
   </main>
 </div>
 
@@ -668,6 +656,7 @@
     <p class="muted" id="modalSub">api_id, api_hash ва номи ботро ворид кунед.</p>
 
     <div class="alert alert-error" id="modalAlert"></div>
+    <div class="alert alert-info" id="modalInfo"></div>
 
     <!-- Step 1: credentials -->
     <div id="stepCreds">
@@ -683,7 +672,7 @@
       <div class="form-row">
         <label>API Hash</label>
         <input id="apiHash" placeholder="0123456789abcdef..." autocomplete="off" />
-        <div class="hint">Аз <b>my.telegram.org</b> → API development tools гиред.</div>
+        <div class="hint">Аз <b>my.telegram.org</b> → API development tools.</div>
       </div>
       <div class="form-actions">
         <button class="btn btn-ghost" onclick="closeModal()">Бекор</button>
@@ -717,7 +706,7 @@
       </div>
     </div>
 
-    <!-- Step 4: 2FA password (optional) -->
+    <!-- Step 4: 2FA password -->
     <div id="stepPwd" style="display:none;">
       <div class="form-row">
         <label>Парол (2FA)</label>
@@ -735,7 +724,7 @@
       <div style="width:64px;height:64px;border-radius:50%;background:#e8f3ed;color:#1f7a4d;display:grid;place-items:center;margin:6px auto 12px;">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
       </div>
-      <h3 style="margin-bottom:6px;">Бот тайёр аст 🎉</h3>
+      <h3 style="margin-bottom:6px;">Бот тайёр аст</h3>
       <p class="muted" id="doneInfo">Файли main.py сохта шуд ва бот фаъол гардид.</p>
       <div class="form-actions" style="justify-content:center;">
         <button class="btn btn-primary" onclick="closeModal(true)">Хуб</button>
@@ -744,16 +733,61 @@
   </div>
 </div>
 
+<!-- ===== Edit Bot Modal ===== -->
+<div class="modal-bg" id="editModal">
+  <div class="modal">
+    <h3>Тағйир додани бот</h3>
+    <p class="muted" id="editSub">Ном, api_id, api_hash-ро тағйир диҳед.</p>
+    <div class="alert alert-error" id="editAlert"></div>
+    <div class="form-row">
+      <label>Номи бот</label>
+      <input id="editName" />
+    </div>
+    <div class="form-row">
+      <label>API ID</label>
+      <input id="editApiId" inputmode="numeric" />
+    </div>
+    <div class="form-row">
+      <label>API Hash</label>
+      <input id="editApiHash" />
+      <div class="hint">Холӣ гузоред агар намехоҳед иваз кунед.</div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="document.getElementById('editModal').classList.remove('open')">Бекор</button>
+      <button class="btn btn-primary" id="btnEdit" onclick="submitEdit()">Захира</button>
+    </div>
+  </div>
+</div>
+
 <!-- ===== Logs Modal ===== -->
 <div class="modal-bg" id="logsModal">
   <div class="modal modal-lg">
-    <h3 id="logsTitle">Логҳо</h3>
-    <p class="muted">Охирин 200 сатри log.</p>
-    <div class="log-box" id="logsBox">Загрузка...</div>
-    <div class="form-actions">
-      <button class="btn btn-ghost" onclick="document.getElementById('logsModal').classList.remove('open')">Пӯшидан</button>
-      <button class="btn btn-primary" id="btnRefreshLogs">Нав кардан</button>
+    <div class="panel-head">
+      <div>
+        <h3 id="logsTitle">Логҳо</h3>
+        <p class="muted">Охирин 300 сатри log.</p>
+      </div>
+      <div class="head-actions">
+        <button class="btn btn-ghost btn-sm" id="btnRefreshLogs">↻ Нав кардан</button>
+        <button class="btn btn-warn btn-sm" id="btnClearLogs">🗑 Тоза кардан</button>
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('logsModal').classList.remove('open')">✕</button>
+      </div>
     </div>
+    <div class="log-box" id="logsBox">Загрузка...</div>
+  </div>
+</div>
+
+<!-- ===== Bot detail modal (files+sessions) ===== -->
+<div class="modal-bg" id="detailModal">
+  <div class="modal modal-lg">
+    <div class="panel-head">
+      <div>
+        <h3 id="detailTitle">Маълумоти бот</h3>
+        <p class="muted">Файлҳо ва сессияҳои ин бот.</p>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('detailModal').classList.remove('open')">✕</button>
+    </div>
+    <div id="detailContent"></div>
   </div>
 </div>
 
@@ -761,10 +795,12 @@
 <div class="toasts" id="toasts"></div>
 
 <script>
-// ============================ Helpers ============================
+// ===================== Helpers =====================
 const $ = (id) => document.getElementById(id);
 let CURRENT_BOT_ID = null;
 let LOGS_BOT_ID = null;
+let EDIT_BOT_ID = null;
+let CACHE_BOTS = [];
 
 function toast(msg, kind='info') {
   const el = document.createElement('div');
@@ -779,7 +815,12 @@ async function api(path, opts={}) {
     method: opts.method || 'GET',
     headers: { 'Content-Type': 'application/json' },
     body: opts.body ? JSON.stringify(opts.body) : undefined,
+    credentials: 'same-origin',
   });
+  if (res.status === 401) {
+    window.location.href = '/login';
+    throw new Error('Unauthorized');
+  }
   let data = {};
   try { data = await res.json(); } catch (e) {}
   if (!res.ok || data.ok === false) {
@@ -799,16 +840,53 @@ function setBtnLoading(btn, loading, label) {
   }
 }
 
-function showAlert(msg) {
-  const el = $('modalAlert');
-  el.textContent = msg;
-  el.classList.add('show');
+function showAlert(elId, msg) {
+  const el = $(elId); el.textContent = msg; el.classList.add('show');
 }
-function hideAlert() {
-  $('modalAlert').classList.remove('show');
+function hideAlert(elId) { $(elId).classList.remove('show'); }
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
 }
 
-// ============================ Modal flow ============================
+function formatBytes(n) {
+  if (n == null) return '-';
+  if (n < 1024) return n + ' B';
+  if (n < 1024*1024) return (n/1024).toFixed(1) + ' KB';
+  return (n/1024/1024).toFixed(2) + ' MB';
+}
+
+function formatUptime(sec) {
+  if (!sec || sec < 1) return '0с';
+  const d = Math.floor(sec / 86400);
+  const h = Math.floor((sec % 86400) / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  const s = Math.floor(sec % 60);
+  const parts = [];
+  if (d) parts.push(d + 'р');  // р = рӯз
+  if (h) parts.push(h + 'с');  // с = соат
+  if (m) parts.push(m + 'дақ');
+  if (!d && !h) parts.push(s + 'сон'); // сон = сония
+  return parts.join(' ');
+}
+
+// ===================== Views (tabs) =====================
+function switchView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  $('view-' + name).classList.add('active');
+  document.querySelector(`.nav-item[data-view="${name}"]`)?.classList.add('active');
+
+  if (name === 'files') loadFiles();
+  if (name === 'audit') loadAudit();
+}
+document.querySelectorAll('.nav-item[data-view]').forEach(btn => {
+  btn.addEventListener('click', () => switchView(btn.dataset.view));
+});
+
+// ===================== Create modal flow =====================
 function openCreate() {
   resetModal();
   $('createModal').classList.add('open');
@@ -820,7 +898,8 @@ function closeModal(reload=false) {
 }
 function resetModal() {
   CURRENT_BOT_ID = null;
-  hideAlert();
+  hideAlert('modalAlert');
+  hideAlert('modalInfo');
   $('botName').value = '';
   $('apiId').value = '';
   $('apiHash').value = '';
@@ -830,11 +909,9 @@ function resetModal() {
   showStep('creds');
 }
 function showStep(name) {
-  ['Creds','Phone','Code','Pwd','Done'].forEach(n =>
-    $('step' + n).style.display = 'none');
+  ['Creds','Phone','Code','Pwd','Done'].forEach(n => $('step' + n).style.display = 'none');
   $('step' + name.charAt(0).toUpperCase() + name.slice(1)).style.display = 'block';
 
-  // Stepper visual
   $('step2').classList.remove('done','active');
   $('step3').classList.remove('done','active');
   if (name === 'phone') $('step2').classList.add('active');
@@ -842,7 +919,6 @@ function showStep(name) {
   if (name === 'pwd')   { $('step2').classList.add('done'); $('step3').classList.add('active'); }
   if (name === 'done')  { $('step2').classList.add('done'); $('step3').classList.add('done'); }
 
-  // Title
   const titles = {
     creds: ['Сохтани боти нав', 'api_id, api_hash ва номи ботро ворид кунед.'],
     phone: ['Рақами телефон', 'Бо коди кишвар, мисоли +992...'],
@@ -853,91 +929,55 @@ function showStep(name) {
   $('modalTitle').textContent = titles[name][0];
   $('modalSub').textContent = titles[name][1];
 }
-
 function backToCreds() { showStep('creds'); }
 function backToPhone() { showStep('phone'); }
 
-// ===== Step 1: create =====
 async function submitCreds() {
-  hideAlert();
+  hideAlert('modalAlert');
   const name = $('botName').value.trim();
   const apiId = $('apiId').value.trim();
   const apiHash = $('apiHash').value.trim();
-  if (!name || !apiId || !apiHash) {
-    showAlert('Ҳамаи майдонҳоро пур кунед.');
-    return;
-  }
+  if (!name || !apiId || !apiHash) { showAlert('modalAlert', 'Ҳамаи майдонҳоро пур кунед.'); return; }
   const btn = $('btnCreate');
   setBtnLoading(btn, true, 'Месозам...');
   try {
-    const r = await api('/api/bots', {
-      method: 'POST',
-      body: { name, api_id: Number(apiId), api_hash: apiHash },
-    });
+    const r = await api('/api/bots', { method: 'POST', body: { name, api_id: Number(apiId), api_hash: apiHash } });
     CURRENT_BOT_ID = r.id;
     showStep('phone');
     setTimeout(() => $('phone').focus(), 80);
     refreshAll();
-  } catch (e) {
-    showAlert(e.message);
-  } finally {
-    setBtnLoading(btn, false);
-  }
+  } catch (e) { showAlert('modalAlert', e.message); }
+  finally { setBtnLoading(btn, false); }
 }
 
-// ===== Step 2: send code =====
 async function submitPhone() {
-  hideAlert();
+  hideAlert('modalAlert');
   const phone = $('phone').value.trim();
-  if (!/^\+\d{7,15}$/.test(phone)) {
-    showAlert('Рақами нодуруст. Намуна: +992123456789');
-    return;
-  }
+  if (!/^\+\d{7,15}$/.test(phone)) { showAlert('modalAlert', 'Рақами нодуруст. Намуна: +992123456789'); return; }
   const btn = $('btnPhone');
   setBtnLoading(btn, true, 'Мефиристам...');
   try {
-    const r = await api(`/api/bots/${CURRENT_BOT_ID}/send-code`, {
-      method: 'POST', body: { phone },
-    });
+    const r = await api(`/api/bots/${CURRENT_BOT_ID}/send-code`, { method: 'POST', body: { phone } });
     if (r.already_authorized) {
-      // Сессия аллакай ҳаст — мустақим бот сохтан
-      toast('Акаунт аллакай ворид шуда буд. Бот сохта мешавад...');
-      // Бо як call ба finalize рафтан имконпазир нест, лозим аст code-ро мегузарем
-      // Аз нав login кунад: rerun send-code
-      // Дар ин ҳолат backend сессияро тоза мекунад ва қадами навбатиро code мепурсад
-      showAlert('Сессияи кӯҳна тоза карда мешавад. Лутфан code мунтазир шавед.');
-      // Боз як send-code (вале дар backend пеш сессияи кӯҳна агар authorized бошад - return шуд).
-      // Барои сода: мегӯем "ботро аз нав созед" — лекин беҳтараш аз UX, ҳамон сабт идома меравад.
-      // Файли ботро мустақим тавлид ва старт мекунем:
-      const r2 = await api(`/api/bots/${CURRENT_BOT_ID}/start`, { method:'POST' });
-      $('doneInfo').textContent = 'Бот аллакай ворид буд. Файл сохта ва оғоз шуд.';
+      $('doneInfo').textContent = 'Сессияи мавҷуда истифода шуд. Бот фаъол гардид.';
       showStep('done');
       refreshAll();
       return;
     }
     showStep('code');
     setTimeout(() => $('code').focus(), 80);
-  } catch (e) {
-    showAlert(e.message);
-  } finally {
-    setBtnLoading(btn, false);
-  }
+  } catch (e) { showAlert('modalAlert', e.message); }
+  finally { setBtnLoading(btn, false); }
 }
 
-// ===== Step 3: verify code =====
 async function submitCode() {
-  hideAlert();
+  hideAlert('modalAlert');
   const code = $('code').value.trim().replace(/\s+/g,'');
-  if (!/^\d{4,7}$/.test(code)) {
-    showAlert('Коди нодуруст. 5–6 рақам.');
-    return;
-  }
+  if (!/^\d{4,7}$/.test(code)) { showAlert('modalAlert', 'Коди нодуруст. 5–6 рақам.'); return; }
   const btn = $('btnCode');
   setBtnLoading(btn, true, 'Месанҷам...');
   try {
-    const r = await api(`/api/bots/${CURRENT_BOT_ID}/verify-code`, {
-      method: 'POST', body: { code },
-    });
+    const r = await api(`/api/bots/${CURRENT_BOT_ID}/verify-code`, { method: 'POST', body: { code } });
     if (r.step === 'password') {
       showStep('pwd');
       setTimeout(() => $('pwd').focus(), 80);
@@ -948,27 +988,18 @@ async function submitCode() {
       showStep('done');
       refreshAll();
     }
-  } catch (e) {
-    showAlert(e.message);
-  } finally {
-    setBtnLoading(btn, false);
-  }
+  } catch (e) { showAlert('modalAlert', e.message); }
+  finally { setBtnLoading(btn, false); }
 }
 
-// ===== Step 4: 2FA password =====
 async function submitPwd() {
-  hideAlert();
+  hideAlert('modalAlert');
   const password = $('pwd').value;
-  if (!password) {
-    showAlert('Лутфан паролро ворид кунед.');
-    return;
-  }
+  if (!password) { showAlert('modalAlert', 'Лутфан паролро ворид кунед.'); return; }
   const btn = $('btnPwd');
   setBtnLoading(btn, true, 'Ворид мешавам...');
   try {
-    const r = await api(`/api/bots/${CURRENT_BOT_ID}/verify-password`, {
-      method: 'POST', body: { password },
-    });
+    const r = await api(`/api/bots/${CURRENT_BOT_ID}/verify-password`, { method: 'POST', body: { password } });
     if (r.step === 'done') {
       $('doneInfo').textContent = r.user
         ? `Хуш омадед, ${r.user.first_name || r.user.username || 'корбар'}! Бот фаъол шуд.`
@@ -976,87 +1007,125 @@ async function submitPwd() {
       showStep('done');
       refreshAll();
     }
-  } catch (e) {
-    showAlert(e.message);
-  } finally {
-    setBtnLoading(btn, false);
-  }
+  } catch (e) { showAlert('modalAlert', e.message); }
+  finally { setBtnLoading(btn, false); }
 }
 
-// ============================ List & actions ============================
+// ===================== Edit modal =====================
+function openEdit(id) {
+  EDIT_BOT_ID = id;
+  const b = CACHE_BOTS.find(x => x.id === id);
+  if (!b) return;
+  hideAlert('editAlert');
+  $('editName').value = b.name || '';
+  $('editApiId').value = b.api_id || '';
+  $('editApiHash').value = '';
+  $('editSub').textContent = `ID: ${b.id}`;
+  $('editModal').classList.add('open');
+  setTimeout(() => $('editName').focus(), 80);
+}
+
+async function submitEdit() {
+  hideAlert('editAlert');
+  const body = {};
+  const name = $('editName').value.trim();
+  const apiId = $('editApiId').value.trim();
+  const apiHash = $('editApiHash').value.trim();
+  if (name) body.name = name;
+  if (apiId) body.api_id = Number(apiId);
+  if (apiHash) body.api_hash = apiHash;
+  if (!Object.keys(body).length) { showAlert('editAlert', 'Чизе барои тағйир нест.'); return; }
+  const btn = $('btnEdit');
+  setBtnLoading(btn, true, 'Захира мешавад...');
+  try {
+    const r = await api(`/api/bots/${EDIT_BOT_ID}`, { method: 'PATCH', body });
+    if (r.warn) toast(r.warn, 'error');
+    else toast('Тағйир дода шуд');
+    $('editModal').classList.remove('open');
+    refreshAll();
+  } catch (e) { showAlert('editAlert', e.message); }
+  finally { setBtnLoading(btn, false); }
+}
+
+// ===================== List & actions =====================
 async function refreshAll() {
   try {
     const r = await api('/api/bots');
+    CACHE_BOTS = r.bots;
     $('statTotal').textContent = r.summary.total;
     $('statRunning').textContent = r.summary.running;
     $('statStopped').textContent = r.summary.stopped;
     $('statPending').textContent = r.summary.pending;
     $('navBadge').textContent = r.summary.total;
-    renderBots(r.bots);
-  } catch (e) {
-    console.error(e);
-  }
+    renderBots(r.bots, $('botList'));
+    renderBots(r.bots.filter(b => b.status === 'running').slice(0, 5), $('dashBotList'), true);
+  } catch (e) { console.error(e); }
 }
 
-function renderBots(bots) {
-  const list = $('botList');
+function renderBots(bots, container, isDash=false) {
   if (!bots.length) {
-    list.innerHTML = `
+    container.innerHTML = `
       <div class="empty">
         <div class="em-ico">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
         </div>
-        Ҳоло боте нест. Тугмаи «Иловаи бот»-ро пахш кунед.
+        ${isDash ? 'Ҳоло боти фаъол нест.' : 'Ҳоло боте нест. Тугмаи «Иловаи бот»-ро пахш кунед.'}
       </div>`;
     return;
   }
   const search = ($('searchInput').value || '').toLowerCase();
-  list.innerHTML = bots
-    .filter(b => !search || (b.name||'').toLowerCase().includes(search) || (b.username||'').toLowerCase().includes(search))
-    .map(b => botCard(b)).join('');
+  container.innerHTML = bots
+    .filter(b => !search ||
+      (b.name||'').toLowerCase().includes(search) ||
+      (b.username||'').toLowerCase().includes(search) ||
+      (b.phone||'').includes(search))
+    .map(b => botCard(b, isDash)).join('') || `<div class="empty">Чизе ёфт нашуд.</div>`;
 }
 
-function botCard(b) {
+function botCard(b, isDash=false) {
   const initial = (b.name || '?').charAt(0).toUpperCase();
   let pill = `<span class="pill pill-stopped">stopped</span>`;
   if (b.status === 'running') pill = `<span class="pill pill-running">running</span>`;
   else if (['pending','awaiting_code','awaiting_password'].includes(b.status))
     pill = `<span class="pill pill-pending">${b.status}</span>`;
+  else if (b.status === 'authorized') pill = `<span class="pill pill-stopped">authorized</span>`;
 
-  const subInfo = [
-    b.username ? '@' + b.username : null,
-    b.phone || null,
-    b.pid ? 'PID ' + b.pid : null,
-  ].filter(Boolean).join(' · ');
+  const meta = [];
+  if (b.username) meta.push(`<span>@${escapeHtml(b.username)}</span>`);
+  if (b.phone) meta.push(`<span>📱 ${escapeHtml(b.phone)}</span>`);
+  if (b.pid) meta.push(`<span>PID ${b.pid}</span>`);
+  if (b.status === 'running' && b.uptime_seconds != null) {
+    meta.push(`<span class="uptime" data-uptime="${b.uptime_seconds}" data-bot="${b.id}">⏱ ${formatUptime(b.uptime_seconds)}</span>`);
+  }
+  if (b.created_at) meta.push(`<span>📅 ${escapeHtml(b.created_at.replace('T',' '))}</span>`);
 
   const actions = [];
-  if (b.status === 'running') {
-    actions.push(`<button class="btn btn-ghost btn-sm" onclick="botAction('${b.id}','stop')">⏸ Боздоштан</button>`);
-    actions.push(`<button class="btn btn-ghost btn-sm" onclick="botAction('${b.id}','restart')">↻ Restart</button>`);
-  } else if (b.status === 'authorized' || b.status === 'stopped') {
-    actions.push(`<button class="btn btn-primary btn-sm" onclick="botAction('${b.id}','start')">▶ Оғоз</button>`);
+  if (isDash) {
+    actions.push(`<button class="btn btn-ghost btn-sm" onclick="openLogs('${b.id}','${escapeHtml(b.name||'')}')">📜 Logs</button>`);
   } else {
-    actions.push(`<button class="btn btn-primary btn-sm" onclick="continueLogin('${b.id}')">Идомаи login</button>`);
+    if (b.status === 'running') {
+      actions.push(`<button class="btn btn-warn btn-sm" onclick="botAction('${b.id}','stop')">⏸ Stop</button>`);
+      actions.push(`<button class="btn btn-info btn-sm" onclick="botAction('${b.id}','restart')">↻ Restart</button>`);
+    } else if (b.status === 'authorized' || b.status === 'stopped') {
+      actions.push(`<button class="btn btn-primary btn-sm" onclick="botAction('${b.id}','start')">▶ Start</button>`);
+    } else {
+      actions.push(`<button class="btn btn-primary btn-sm" onclick="continueLogin('${b.id}')">→ Идома</button>`);
+    }
+    actions.push(`<button class="btn btn-ghost btn-sm" onclick="openLogs('${b.id}','${escapeHtml(b.name||'')}')">📜 Logs</button>`);
+    actions.push(`<button class="btn btn-ghost btn-sm" onclick="openDetail('${b.id}')">📁 Файлҳо</button>`);
+    actions.push(`<button class="btn btn-ghost btn-sm" onclick="openEdit('${b.id}')">✏️ Edit</button>`);
+    actions.push(`<button class="btn btn-danger btn-sm" onclick="deleteBot('${b.id}','${escapeHtml(b.name||'')}')">✕ Delete</button>`);
   }
-  actions.push(`<button class="btn btn-ghost btn-sm" onclick="openLogs('${b.id}','${(b.name||'').replace(/'/g,"\\'")}')">📜 Logs</button>`);
-  actions.push(`<button class="btn btn-danger btn-sm" onclick="deleteBot('${b.id}')">✕</button>`);
 
   return `
     <div class="bot-card">
       <div class="bot-avatar">${initial}</div>
-      <div class="bot-info">
-        <b>${escapeHtml(b.name || b.id)} ${pill}</b>
-        <small>${escapeHtml(subInfo || 'Сохта шуд: ' + (b.created_at||''))}</small>
+      <div>
+        <div class="bot-name">${escapeHtml(b.name || b.id)} ${pill}</div>
+        <div class="bot-meta">${meta.join('')}</div>
       </div>
       <div class="bot-actions">${actions.join('')}</div>
-    </div>
-  `;
-}
-
-function escapeHtml(s) {
-  return String(s||'').replace(/[&<>"']/g, c => ({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  }[c]));
+    </div>`;
 }
 
 async function botAction(id, action) {
@@ -1067,8 +1136,8 @@ async function botAction(id, action) {
   } catch (e) { toast(e.message, 'error'); }
 }
 
-async function deleteBot(id) {
-  if (!confirm('Боро ҳазф кардан? Сессия ва файл низ ҳазф мешаванд.')) return;
+async function deleteBot(id, name) {
+  if (!confirm(`Боти "${name}"-ро тамоман ҳазф кардан?\n\nФайлҳо, сессияҳо ва логҳо низ ҳазф мешаванд.`)) return;
   try {
     await api(`/api/bots/${id}`, { method: 'DELETE' });
     toast('Ҳазф шуд');
@@ -1084,13 +1153,11 @@ function continueLogin(id) {
   setTimeout(() => $('phone').focus(), 80);
 }
 function resetModalKeepingId() {
-  hideAlert();
-  $('phone').value = '';
-  $('code').value = '';
-  $('pwd').value = '';
+  hideAlert('modalAlert');
+  $('phone').value = ''; $('code').value = ''; $('pwd').value = '';
 }
 
-// ============================ Logs ============================
+// ===================== Logs =====================
 function openLogs(id, name) {
   LOGS_BOT_ID = id;
   $('logsTitle').textContent = 'Логҳо · ' + (name || id);
@@ -1099,33 +1166,178 @@ function openLogs(id, name) {
 }
 async function loadLogs() {
   try {
-    const r = await api(`/api/bots/${LOGS_BOT_ID}/logs?lines=200`);
+    const r = await api(`/api/bots/${LOGS_BOT_ID}/logs?lines=300`);
     $('logsBox').textContent = r.log || '(холӣ)';
     $('logsBox').scrollTop = $('logsBox').scrollHeight;
-  } catch (e) {
-    $('logsBox').textContent = 'Хато: ' + e.message;
-  }
+  } catch (e) { $('logsBox').textContent = 'Хато: ' + e.message; }
 }
 $('btnRefreshLogs').addEventListener('click', loadLogs);
+$('btnClearLogs').addEventListener('click', async () => {
+  if (!confirm('Логҳоро тоза кардан?')) return;
+  try {
+    await api(`/api/bots/${LOGS_BOT_ID}/logs/clear`, { method: 'POST' });
+    toast('Логҳо тоза шуданд');
+    loadLogs();
+  } catch (e) { toast(e.message, 'error'); }
+});
 
-// ============================ Wire up ============================
+// ===================== Detail (files+sessions per bot) =====================
+async function openDetail(id) {
+  $('detailModal').classList.add('open');
+  $('detailContent').innerHTML = '<div class="empty">Загрузка...</div>';
+  try {
+    const r = await api(`/api/bots/${id}`);
+    $('detailTitle').textContent = 'Маълумоти бот · ' + (r.bot.name || id);
+    $('detailContent').innerHTML = renderDetail(r);
+  } catch (e) {
+    $('detailContent').innerHTML = `<div class="empty">Хато: ${escapeHtml(e.message)}</div>`;
+  }
+}
+
+function renderDetail(r) {
+  const b = r.bot;
+  const info = `
+    <div class="file-section">
+      <h4>📌 Маълумот</h4>
+      <table class="file-table">
+        <tr><td>ID</td><td class="name">${escapeHtml(b.id)}</td></tr>
+        <tr><td>Ном</td><td>${escapeHtml(b.name||'')}</td></tr>
+        <tr><td>Телефон</td><td>${escapeHtml(b.phone||'-')}</td></tr>
+        <tr><td>Telegram username</td><td>${b.username ? '@'+escapeHtml(b.username) : '-'}</td></tr>
+        <tr><td>Telegram User ID</td><td>${b.admin_user_id || '-'}</td></tr>
+        <tr><td>API ID</td><td>${b.api_id}</td></tr>
+        <tr><td>Холат</td><td>${escapeHtml(b.status)}</td></tr>
+        <tr><td>Uptime (ҳозира)</td><td>${formatUptime(b.uptime_seconds || 0)}</td></tr>
+        <tr><td>Кулли вақти кор</td><td>${formatUptime(b.total_runtime || 0)}</td></tr>
+        <tr><td>Сохта шуд</td><td>${escapeHtml((b.created_at||'').replace('T',' '))}</td></tr>
+      </table>
+    </div>`;
+
+  const files = `
+    <div class="file-section">
+      <h4>📁 Файлҳо · app/users/${escapeHtml(b.id)}/</h4>
+      ${r.files.length ? `<table class="file-table">
+        <thead><tr><th>Ном</th><th>Андоза</th><th>Тағйир</th></tr></thead>
+        <tbody>${r.files.map(f => `
+          <tr>
+            <td class="name">${escapeHtml(f.name)}${f.is_session ? ' 🔑' : ''}</td>
+            <td class="size">${formatBytes(f.size)}</td>
+            <td class="size">${escapeHtml(f.modified.replace('T',' '))}</td>
+          </tr>`).join('')}</tbody>
+        </table>` : '<div class="empty" style="padding:20px;">Файлҳо нестанд</div>'}
+    </div>`;
+
+  const sessions = `
+    <div class="file-section">
+      <h4>🔑 Сессияҳои Telegram · app/sessions/</h4>
+      ${r.sessions.length ? `<table class="file-table">
+        <thead><tr><th>Ном</th><th>Андоза</th><th>Тағйир</th></tr></thead>
+        <tbody>${r.sessions.map(f => `
+          <tr>
+            <td class="name">${escapeHtml(f.name)}</td>
+            <td class="size">${formatBytes(f.size)}</td>
+            <td class="size">${escapeHtml(f.modified.replace('T',' '))}</td>
+          </tr>`).join('')}</tbody>
+        </table>` : '<div class="empty" style="padding:20px;">Сессияҳо нестанд</div>'}
+    </div>`;
+
+  return info + files + sessions;
+}
+
+// ===================== Files (global) =====================
+async function loadFiles() {
+  try {
+    const r = await api('/api/files');
+    let html = '';
+
+    if (r.bot_dirs.length) {
+      r.bot_dirs.forEach(bd => {
+        html += `<div class="file-section">
+          <h4>📁 ${escapeHtml(bd.name)} <span class="muted" style="font-weight:400;color:var(--muted);">· ${escapeHtml(bd.id)}</span></h4>`;
+        if (bd.files.length) {
+          html += `<table class="file-table">
+            <thead><tr><th>Ном</th><th>Андоза</th><th>Тағйир</th></tr></thead>
+            <tbody>${bd.files.map(f => `
+              <tr>
+                <td class="name">${escapeHtml(f.name)}</td>
+                <td class="size">${formatBytes(f.size)}</td>
+                <td class="size">${escapeHtml(f.modified.replace('T',' '))}</td>
+              </tr>`).join('')}</tbody></table>`;
+        } else {
+          html += '<div class="empty" style="padding:20px;">Холӣ</div>';
+        }
+        html += '</div>';
+      });
+    } else {
+      html += '<div class="empty"><div class="em-ico">📁</div>Ҳоло ҷузвдонҳои бот нестанд.</div>';
+    }
+
+    html += '<div class="file-section"><h4>🔑 Ҳамаи сессияҳо · app/sessions/</h4>';
+    if (r.sessions.length) {
+      html += `<table class="file-table">
+        <thead><tr><th>Ном</th><th>Андоза</th><th>Тағйир</th></tr></thead>
+        <tbody>${r.sessions.map(f => `
+          <tr>
+            <td class="name">${escapeHtml(f.name)}</td>
+            <td class="size">${formatBytes(f.size)}</td>
+            <td class="size">${escapeHtml(f.modified.replace('T',' '))}</td>
+          </tr>`).join('')}</tbody></table>`;
+    } else {
+      html += '<div class="empty" style="padding:20px;">Сессияҳо нестанд</div>';
+    }
+    html += '</div>';
+
+    $('filesContent').innerHTML = html;
+  } catch (e) {
+    $('filesContent').innerHTML = `<div class="empty">Хато: ${escapeHtml(e.message)}</div>`;
+  }
+}
+
+// ===================== Audit =====================
+async function loadAudit() {
+  try {
+    const r = await api('/api/audit?limit=50');
+    if (!r.audit.length) {
+      $('auditList').innerHTML = '<div class="empty"><div class="em-ico">📜</div>Таърих холӣ.</div>';
+      return;
+    }
+    $('auditList').innerHTML = r.audit.map(a => {
+      const meta = a.meta && a.meta !== '{}' ? a.meta : '';
+      const target = a.bot_id ? '<span class="name" style="font-family:ui-monospace,monospace;font-size:11px;">'+escapeHtml(a.bot_id)+'</span>' : '<span class="muted">—</span>';
+      return `<div class="audit-row">
+        <span class="ts">${escapeHtml(a.created_at.replace('T',' '))}</span>
+        <span class="act">${escapeHtml(a.action)}</span>
+        <span>${target} ${meta ? `<span class="muted" style="margin-left:8px;font-size:11px;">${escapeHtml(meta)}</span>` : ''}</span>
+      </div>`;
+    }).join('');
+  } catch (e) {
+    $('auditList').innerHTML = `<div class="empty">Хато: ${escapeHtml(e.message)}</div>`;
+  }
+}
+
+// ===================== Live uptime ticker =====================
+setInterval(() => {
+  document.querySelectorAll('.uptime[data-uptime]').forEach(el => {
+    let s = parseInt(el.dataset.uptime, 10) + 1;
+    el.dataset.uptime = s;
+    el.textContent = '⏱ ' + formatUptime(s);
+  });
+}, 1000);
+
+// ===================== Wire up =====================
 $('searchInput').addEventListener('input', refreshAll);
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
-    $('createModal').classList.remove('open');
-    $('logsModal').classList.remove('open');
+    document.querySelectorAll('.modal-bg.open').forEach(m => m.classList.remove('open'));
   }
-  if ((e.metaKey || e.ctrlKey) && e.key === 'f') {
-    e.preventDefault();
-    $('searchInput').focus();
-  }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'f') { e.preventDefault(); $('searchInput').focus(); }
 });
 
-// First load + auto-refresh
+// First load + auto-refresh (without resetting uptime tickers)
 refreshAll();
 setInterval(() => {
-  if (!$('createModal').classList.contains('open')) refreshAll();
-}, 5000);
+  if (!document.querySelector('.modal-bg.open')) refreshAll();
+}, 8000);
 </script>
 
 </body>
