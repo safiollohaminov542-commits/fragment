@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Donezo · Userbot Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  /* ===== Reset & base ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ececec;
+    --panel: #ffffff;
+    --green: #1f7a4d;
+    --green-dark: #145c39;
+    --green-soft: #e8f3ed;
+    --green-light: #f1f8f4;
+    --text: #1a1d1b;
+    --muted: #7b8079;
+    --line: #ebebeb;
+    --pending: #fdecd2;
+    --pending-text: #b6731c;
+    --danger: #e35d5d;
+    --radius: 18px;
+    --radius-sm: 12px;
+    --shadow: 0 1px 0 rgba(0,0,0,0.02), 0 8px 24px -12px rgba(20,92,57,0.08);
+  }
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Layout ===== */
+  .shell {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 100vh;
+    padding: 18px;
+    gap: 18px;
+  }
+
+  /* ===== Sidebar ===== */
+  .sidebar {
+    background: var(--panel);
+    border-radius: 22px;
+    padding: 22px 18px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px 22px 8px;
+  }
+  .brand-logo {
+    width: 34px; height: 34px;
+    background: var(--green);
+    border-radius: 10px;
+    display: grid; place-items: center;
+    color: #fff; font-weight: 800;
+  }
+  .brand-name { font-weight: 800; font-size: 19px; letter-spacing: -0.3px; }
+  .nav-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    padding: 0 12px;
+    margin: 6px 0 8px 0;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 12px;
+    border-radius: 10px;
+    color: #4f534f;
+    cursor: pointer;
+    font-weight: 500;
+    margin-bottom: 2px;
+    position: relative;
+    user-select: none;
+  }
+  .nav-item:hover { background: #f7f7f6; }
+  .nav-item.active {
+    background: var(--green-soft);
+    color: var(--green-dark);
+    font-weight: 600;
+  }
+  .nav-item.active::before {
+    content: ""; position: absolute; left: -18px; top: 8px; bottom: 8px;
+    width: 4px; border-radius: 0 4px 4px 0; background: var(--green);
+  }
+  .nav-item .ico { width: 18px; height: 18px; flex: 0 0 18px; opacity: 0.85; }
+  .nav-badge {
+    margin-left: auto;
+    background: var(--green-soft);
+    color: var(--green-dark);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px; border-radius: 999px;
+  }
+  .promo {
+    margin-top: auto;
+    background: linear-gradient(135deg, #145c39, #1f7a4d 60%, #2e9963);
+    color: #fff;
+    border-radius: 18px;
+    padding: 18px;
+    position: relative; overflow: hidden;
+  }
+  .promo::before, .promo::after {
+    content: ""; position: absolute; border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+  }
+  .promo::before { width: 140px; height: 140px; right: -50px; bottom: -60px; }
+  .promo::after { width: 80px; height: 80px; right: 30px; top: -30px; }
+  .promo .icn {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: rgba(255,255,255,0.2); display: grid; place-items: center;
+    margin-bottom: 10px;
+  }
+  .promo h4 { font-size: 14px; font-weight: 700; line-height: 1.3; }
+  .promo p { opacity: 0.85; font-size: 12px; margin-top: 4px; }
+  .promo button {
+    margin-top: 12px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    padding: 8px 14px; border-radius: 999px;
+    font-weight: 600; cursor: pointer;
+    backdrop-filter: blur(4px);
+  }
+  .promo button:hover { background: rgba(255,255,255,0.25); }
+
+  /* ===== Main ===== */
+  .main {
+    display: flex; flex-direction: column; gap: 18px;
+    min-width: 0;
+  }
+  .topbar {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--panel);
+    border-radius: 16px;
+    padding: 10px 14px;
+    box-shadow: var(--shadow);
+  }
+  .search {
+    flex: 1; max-width: 420px;
+    display: flex; align-items: center; gap: 10px;
+    background: #f5f5f4;
+    border-radius: 12px;
+    padding: 10px 14px;
+  }
+  .search input {
+    flex: 1; border: none; background: transparent; outline: none;
+    font: inherit; color: var(--text);
+  }
+  .search .kbd {
+    font-size: 11px; color: var(--muted);
+    background: #fff; padding: 2px 8px; border-radius: 6px;
+    border: 1px solid var(--line);
+  }
+  .top-actions { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .icon-btn {
+    width: 38px; height: 38px;
+    background: #f5f5f4;
+    border: none; border-radius: 12px;
+    display: grid; place-items: center;
+    cursor: pointer; color: #555;
+  }
+  .icon-btn:hover { background: #ececea; }
+  .user-chip {
+    display: flex; align-items: center; gap: 10px;
+    padding: 4px 12px 4px 4px;
+    border-radius: 999px;
+    background: #f5f5f4;
+  }
+  .user-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(135deg,#ffd6a8,#f4a05c);
+    display: grid; place-items: center; color: #5a3818;
+    font-weight: 700;
+  }
+  .user-meta { line-height: 1.15; }
+  .user-meta b { font-weight: 600; font-size: 13px; }
+  .user-meta span { font-size: 11px; color: var(--muted); }
+
+  /* ===== Page header ===== */
+  .page-head {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+    padding: 4px 6px 0;
+  }
+  .page-title { font-size: 26px; font-weight: 700; letter-spacing: -0.4px; }
+  .page-sub { color: var(--muted); margin-top: 4px; font-size: 13px; }
+  .head-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    border: none; cursor: pointer;
+    font: inherit; font-weight: 600;
+    padding: 11px 18px; border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: transform .05s ease, background .15s ease;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary { background: var(--green); color: #fff; }
+  .btn-primary:hover { background: var(--green-dark); }
+  .btn-ghost {
+    background: #fff; color: var(--text);
+    border: 1px solid var(--line);
+  }
+  .btn-ghost:hover { background: #fafafa; }
+  .btn-sm { padding: 7px 12px; font-size: 12px; }
+  .btn-danger { background: #fff; color: var(--danger); border: 1px solid #f1cfcf; }
+  .btn-danger:hover { background: #fdf3f3; }
+
+  /* ===== Stat cards ===== */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .stat-card {
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 18px;
+    position: relative;
+    box-shadow: var(--shadow);
+  }
+  .stat-card.green {
+    background: var(--green);
+    color: #fff;
+  }
+  .stat-card .arrow {
+    position: absolute; top: 14px; right: 14px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: #f5f5f4; color: #555;
+    display: grid; place-items: center;
+  }
+  .stat-card.green .arrow { background: rgba(255,255,255,0.18); color: #fff; }
+  .stat-card .label {
+    font-size: 13px; font-weight: 600;
+    color: var(--muted);
+  }
+  .stat-card.green .label { color: rgba(255,255,255,0.85); }
+  .stat-card .value {
+    font-size: 38px; font-weight: 700; letter-spacing: -1px;
+    margin-top: 6px;
+  }
+  .stat-card .delta {
+    margin-top: 10px;
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600;
+    background: #f5f5f4;
+    color: #555;
+    padding: 4px 8px; border-radius: 999px;
+  }
+  .stat-card.green .delta { background: rgba(255,255,255,0.18); color: #fff; }
+
+  /* ===== Content grid ===== */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 14px;
+  }
+  .panel {
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow);
+  }
+  .panel-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .panel-title { font-size: 16px; font-weight: 700; }
+  .panel-link { color: var(--green); font-size: 12px; font-weight: 600; cursor: pointer; }
+
+  /* ===== Bot list ===== */
+  .bot-list { display: flex; flex-direction: column; gap: 10px; }
+  .bot-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    transition: all .15s ease;
+  }
+  .bot-card:hover { border-color: #d6e7dd; background: #fbfdfb; }
+  .bot-avatar {
+    width: 42px; height: 42px; border-radius: 12px;
+    background: var(--green-soft); color: var(--green-dark);
+    display: grid; place-items: center;
+    font-weight: 700;
+  }
+  .bot-info b { font-weight: 600; font-size: 14px; display: block; }
+  .bot-info small { color: var(--muted); font-size: 12px; }
+  .bot-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .pill {
+    font-size: 11px; font-weight: 600;
+    padding: 4px 10px; border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .pill::before {
+    content: ""; width: 7px; height: 7px; border-radius: 50%;
+    background: currentColor;
+  }
+  .pill-running { background: #e8f3ed; color: #1f7a4d; }
+  .pill-stopped { background: #f1f1f1; color: #757575; }
+  .pill-pending { background: var(--pending); color: var(--pending-text); }
+  .pill-error   { background: #fdecec; color: #c14545; }
+
+  .empty {
+    text-align: center; padding: 40px 20px;
+    color: var(--muted); font-size: 13px;
+  }
+  .empty .em-ico {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--green-light);
+    display: grid; place-items: center;
+    margin: 0 auto 12px;
+    color: var(--green);
+  }
+
+  /* ===== Side panel (project list) ===== */
+  .mini-list { display: flex; flex-direction: column; gap: 12px; }
+  .mini-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 6px;
+    border-radius: 10px;
+  }
+  .mini-row:hover { background: #fafafa; }
+  .mini-avatar {
+    width: 28px; height: 28px; border-radius: 8px;
+    display: grid; place-items: center;
+    font-weight: 700; font-size: 11px;
+  }
+  .mini-row b { font-size: 13px; font-weight: 600; }
+  .mini-row small { color: var(--muted); font-size: 11px; }
+
+  /* ===== Modal ===== */
+  .modal-bg {
+    position: fixed; inset: 0;
+    background: rgba(20,30,25,0.45);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+  }
+  .modal-bg.open { display: flex; }
+  .modal {
+    background: #fff;
+    border-radius: 22px;
+    width: 100%; max-width: 460px;
+    padding: 26px;
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,0.3);
+    animation: pop .18s ease;
+  }
+  @keyframes pop {
+    from { transform: translateY(8px) scale(.98); opacity: 0; }
+    to   { transform: translateY(0) scale(1); opacity: 1; }
+  }
+  .modal h3 {
+    font-size: 20px; font-weight: 700; letter-spacing: -0.3px;
+    margin-bottom: 6px;
+  }
+  .modal .muted { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+  .form-row { margin-bottom: 14px; }
+  .form-row label {
+    display: block; font-size: 12px; font-weight: 600;
+    color: #555; margin-bottom: 6px;
+  }
+  .form-row input {
+    width: 100%; font: inherit; font-size: 14px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    background: #fafafa;
+    border-radius: 12px;
+    outline: none; transition: border .15s ease, background .15s ease;
+  }
+  .form-row input:focus {
+    border-color: var(--green);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(31,122,77,0.1);
+  }
+  .form-row .hint {
+    font-size: 11px; color: var(--muted); margin-top: 4px;
+  }
+  .form-row.error input { border-color: var(--danger); }
+  .form-actions {
+    display: flex; gap: 10px; justify-content: flex-end;
+    margin-top: 8px;
+  }
+  .alert {
+    padding: 10px 12px; border-radius: 10px;
+    font-size: 12px; margin-bottom: 12px;
+    display: none;
+  }
+  .alert.show { display: block; }
+  .alert-error { background: #fdecec; color: #c14545; }
+  .alert-info  { background: #eaf3fb; color: #2c6cb0; }
+
+  /* Stepper */
+  .stepper {
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 18px;
+  }
+  .step {
+    flex: 1; height: 4px; border-radius: 4px;
+    background: #ececec;
+  }
+  .step.done { background: var(--green); }
+  .step.active { background: var(--green); opacity: 0.55; }
+
+  /* Loader */
+  .spin {
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    display: inline-block;
+  }
+  .btn-ghost .spin { border-color: rgba(0,0,0,0.15); border-top-color: var(--text); }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Logs modal */
+  .modal-lg { max-width: 720px; }
+  .log-box {
+    background: #0e1611;
+    color: #c9e4d4;
+    border-radius: 12px;
+    padding: 14px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    height: 360px;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  /* Toast */
+  .toasts {
+    position: fixed; right: 20px; bottom: 20px;
+    display: flex; flex-direction: column; gap: 10px;
+    z-index: 2000;
+  }
+  .toast {
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px 16px;
+    box-shadow: 0 12px 30px -8px rgba(0,0,0,0.2);
+    border-left: 3px solid var(--green);
+    font-size: 13px;
+    animation: slide .25s ease;
+    min-width: 220px; max-width: 320px;
+  }
+  .toast.error { border-left-color: var(--danger); }
+  @keyframes slide { from { transform: translateX(20px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  /* Responsive */
+  @media (max-width: 1100px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .content-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 760px) {
+    .shell { grid-template-columns: 1fr; padding: 10px; }
+    .sidebar { display: none; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Icons */
+  .ico, svg.ico { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- ===== Sidebar ===== -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 6"/></svg>
+      </div>
+      <div class="brand-name">Donezo</div>
+    </div>
+
+    <div class="nav-label">Меню</div>
+    <div class="nav-item active">
+      <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item">
+      <svg class="ico" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h7"/></svg>
+      Tasks <span class="nav-badge" id="navBadge">0</span>
+    </div>
+    <div class="nav-item">
+      <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      Calendar
+    </div>
+    <div class="nav-item">
+      <svg class="ico" viewBox="0 0 24 24"><path d="M3 21V10M9 21V4M15 21v-8M21 21V14"/></svg>
+      Analytics
+    </div>
+    <div class="nav-item">
+      <svg class="ico" viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/><circle cx="17" cy="9" r="2.5"/><path d="M21 21v-1.5a3.5 3.5 0 00-3.5-3.5"/></svg>
+      Team
+    </div>
+
+    <div class="nav-label" style="margin-top: 18px;">General</div>
+    <div class="nav-item">
+      <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.34 1.87l.06.06a2 2 0 11-2.83 2.83l-.06-.06A1.7 1.7 0 0015 19.4a1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1A1.7 1.7 0 009 19.4a1.7 1.7 0 00-1.87.34l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.7 1.7 0 004.6 15a1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1A1.7 1.7 0 004.6 9a1.7 1.7 0 00-.34-1.87l-.06-.06a2 2 0 112.83-2.83l.06.06A1.7 1.7 0 009 4.6a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1A1.7 1.7 0 0015 4.6a1.7 1.7 0 001.87-.34l.06-.06a2 2 0 112.83 2.83l-.06.06A1.7 1.7 0 0019.4 9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>
+      Settings
+    </div>
+    <div class="nav-item">
+      <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 015.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+      Help
+    </div>
+    <div class="nav-item">
+      <svg class="ico" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
+      Logout
+    </div>
+
+    <div class="promo">
+      <div class="icn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18v-6M9 15l3 3 3-3M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <h4>Userbot SDK<br/>барои дӯстон</h4>
+      <p>Ҳамон ботро ба одамон осон диҳед.</p>
+      <button onclick="document.getElementById('createModal').classList.add('open')">Сохтан</button>
+    </div>
+  </aside>
+
+  <!-- ===== Main ===== -->
+  <main class="main">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="search">
+        <svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="searchInput" placeholder="Ҷустуҷӯи бот..." />
+        <span class="kbd">⌘ F</span>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" title="Mail">
+          <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+        </button>
+        <button class="icon-btn" title="Notifications">
+          <svg class="ico" viewBox="0 0 24 24"><path d="M18 16v-5a6 6 0 10-12 0v5l-2 2h16l-2-2z"/><path d="M10 21h4"/></svg>
+        </button>
+        <div class="user-chip">
+          <div class="user-avatar">TM</div>
+          <div class="user-meta">
+            <b>Totok Michael</b><br/>
+            <span>tmichael20@mail.com</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page head -->
+    <div class="page-head">
+      <div>
+        <div class="page-title">Dashboard</div>
+        <div class="page-sub">Userbot-ҳои худро идора кунед, осон ва зебо.</div>
+      </div>
+      <div class="head-actions">
+        <button class="btn btn-primary" onclick="openCreate()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          Иловаи бот
+        </button>
+        <button class="btn btn-ghost" onclick="refreshAll()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0115.5-6.36L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-15.5 6.36L3 16"/><path d="M3 21v-5h5"/></svg>
+          Нав кардан
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat-card green">
+        <button class="arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></button>
+        <div class="label">Ҳамаи ботҳо</div>
+        <div class="value" id="statTotal">0</div>
+        <div class="delta">📈 Иловашуда</div>
+      </div>
+      <div class="stat-card">
+        <button class="arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></button>
+        <div class="label">Боздошташуда</div>
+        <div class="value" id="statStopped">0</div>
+        <div class="delta">⏸ Холати ҳозира</div>
+      </div>
+      <div class="stat-card">
+        <button class="arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></button>
+        <div class="label">Кор мекунанд</div>
+        <div class="value" id="statRunning">0</div>
+        <div class="delta">▶ Фаъол</div>
+      </div>
+      <div class="stat-card">
+        <button class="arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></button>
+        <div class="label">Дар интизор</div>
+        <div class="value" id="statPending">0</div>
+        <div class="delta">⌛ Login дар ҷараён</div>
+      </div>
+    </div>
+
+    <!-- Content grid -->
+    <div class="content-grid">
+      <!-- Bot list -->
+      <section class="panel">
+        <div class="panel-head">
+          <div class="panel-title">Ботҳо</div>
+          <span class="panel-link" onclick="refreshAll()">Нав кардан</span>
+        </div>
+        <div class="bot-list" id="botList"></div>
+      </section>
+
+      <!-- Side info -->
+      <section class="panel">
+        <div class="panel-head">
+          <div class="panel-title">Чӣ тавр кор мекунад?</div>
+        </div>
+        <div class="mini-list">
+          <div class="mini-row">
+            <div class="mini-avatar" style="background:#e8f3ed;color:#1f7a4d;">1</div>
+            <div><b>api_id ва api_hash</b><br/><small>Аз my.telegram.org гиред</small></div>
+          </div>
+          <div class="mini-row">
+            <div class="mini-avatar" style="background:#fff1d6;color:#b6731c;">2</div>
+            <div><b>Рақами телефон</b><br/><small>+992... ё +7...</small></div>
+          </div>
+          <div class="mini-row">
+            <div class="mini-avatar" style="background:#e8eef9;color:#2c6cb0;">3</div>
+            <div><b>Коди тасдиқ</b><br/><small>Telegram коди 6-ракамаро мефиристад</small></div>
+          </div>
+          <div class="mini-row">
+            <div class="mini-avatar" style="background:#fde8ec;color:#c14545;">4</div>
+            <div><b>Парол (агар бошад)</b><br/><small>2FA пуррасозӣ</small></div>
+          </div>
+          <div class="mini-row">
+            <div class="mini-avatar" style="background:#e8f3ed;color:#1f7a4d;">✓</div>
+            <div><b>Бот автомати оғоз мешавад</b><br/><small>main.py сохта ва иҷро мегардад</small></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<!-- ===== Create Bot Modal ===== -->
+<div class="modal-bg" id="createModal">
+  <div class="modal">
+    <div class="stepper">
+      <div class="step done"></div>
+      <div class="step" id="step2"></div>
+      <div class="step" id="step3"></div>
+    </div>
+    <h3 id="modalTitle">Сохтани боти нав</h3>
+    <p class="muted" id="modalSub">api_id, api_hash ва номи ботро ворид кунед.</p>
+
+    <div class="alert alert-error" id="modalAlert"></div>
+
+    <!-- Step 1: credentials -->
+    <div id="stepCreds">
+      <div class="form-row">
+        <label>Номи бот</label>
+        <input id="botName" placeholder="my_userbot" autocomplete="off" />
+        <div class="hint">Танҳо барои худатон, ҳамчун теги шинос.</div>
+      </div>
+      <div class="form-row">
+        <label>API ID</label>
+        <input id="apiId" placeholder="12345678" inputmode="numeric" autocomplete="off" />
+      </div>
+      <div class="form-row">
+        <label>API Hash</label>
+        <input id="apiHash" placeholder="0123456789abcdef..." autocomplete="off" />
+        <div class="hint">Аз <b>my.telegram.org</b> → API development tools гиред.</div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="closeModal()">Бекор</button>
+        <button class="btn btn-primary" id="btnCreate" onclick="submitCreds()">Идома</button>
+      </div>
+    </div>
+
+    <!-- Step 2: phone -->
+    <div id="stepPhone" style="display:none;">
+      <div class="form-row">
+        <label>Рақами телефон</label>
+        <input id="phone" placeholder="+992123456789" autocomplete="off" />
+        <div class="hint">Бо коди кишвар. Намуна: <b>+992</b>, <b>+7</b>, <b>+1</b>...</div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="backToCreds()">Бозгашт</button>
+        <button class="btn btn-primary" id="btnPhone" onclick="submitPhone()">Фиристодани код</button>
+      </div>
+    </div>
+
+    <!-- Step 3: code -->
+    <div id="stepCode" style="display:none;">
+      <div class="form-row">
+        <label>Коди тасдиқ</label>
+        <input id="code" placeholder="12345" inputmode="numeric" maxlength="7" autocomplete="off" />
+        <div class="hint">Telegram ба чати «Telegram» дар акаунти шумо коди 5–6-ракама фиристод.</div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="backToPhone()">Бозгашт</button>
+        <button class="btn btn-primary" id="btnCode" onclick="submitCode()">Тасдиқ</button>
+      </div>
+    </div>
+
+    <!-- Step 4: 2FA password (optional) -->
+    <div id="stepPwd" style="display:none;">
+      <div class="form-row">
+        <label>Парол (2FA)</label>
+        <input id="pwd" type="password" placeholder="Пароли cloud" autocomplete="off" />
+        <div class="hint">Танҳо агар дар акаунт парол гузошта бошед.</div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="closeModal()">Бекор</button>
+        <button class="btn btn-primary" id="btnPwd" onclick="submitPwd()">Ворид шудан</button>
+      </div>
+    </div>
+
+    <!-- Step 5: done -->
+    <div id="stepDone" style="display:none; text-align:center;">
+      <div style="width:64px;height:64px;border-radius:50%;background:#e8f3ed;color:#1f7a4d;display:grid;place-items:center;margin:6px auto 12px;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+      </div>
+      <h3 style="margin-bottom:6px;">Бот тайёр аст 🎉</h3>
+      <p class="muted" id="doneInfo">Файли main.py сохта шуд ва бот фаъол гардид.</p>
+      <div class="form-actions" style="justify-content:center;">
+        <button class="btn btn-primary" onclick="closeModal(true)">Хуб</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Logs Modal ===== -->
+<div class="modal-bg" id="logsModal">
+  <div class="modal modal-lg">
+    <h3 id="logsTitle">Логҳо</h3>
+    <p class="muted">Охирин 200 сатри log.</p>
+    <div class="log-box" id="logsBox">Загрузка...</div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="document.getElementById('logsModal').classList.remove('open')">Пӯшидан</button>
+      <button class="btn btn-primary" id="btnRefreshLogs">Нав кардан</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Toasts ===== -->
+<div class="toasts" id="toasts"></div>
+
+<script>
+// ============================ Helpers ============================
+const $ = (id) => document.getElementById(id);
+let CURRENT_BOT_ID = null;
+let LOGS_BOT_ID = null;
+
+function toast(msg, kind='info') {
+  const el = document.createElement('div');
+  el.className = 'toast' + (kind === 'error' ? ' error' : '');
+  el.textContent = msg;
+  $('toasts').appendChild(el);
+  setTimeout(() => el.remove(), 3500);
+}
+
+async function api(path, opts={}) {
+  const res = await fetch(path, {
+    method: opts.method || 'GET',
+    headers: { 'Content-Type': 'application/json' },
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  });
+  let data = {};
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok || data.ok === false) {
+    throw new Error(data.error || ('HTTP ' + res.status));
+  }
+  return data;
+}
+
+function setBtnLoading(btn, loading, label) {
+  if (loading) {
+    btn.dataset.label = btn.innerHTML;
+    btn.innerHTML = '<span class="spin"></span> ' + (label || 'Дар ҷараён...');
+    btn.disabled = true;
+  } else {
+    btn.innerHTML = btn.dataset.label || label || 'OK';
+    btn.disabled = false;
+  }
+}
+
+function showAlert(msg) {
+  const el = $('modalAlert');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+function hideAlert() {
+  $('modalAlert').classList.remove('show');
+}
+
+// ============================ Modal flow ============================
+function openCreate() {
+  resetModal();
+  $('createModal').classList.add('open');
+  setTimeout(() => $('botName').focus(), 80);
+}
+function closeModal(reload=false) {
+  $('createModal').classList.remove('open');
+  if (reload) refreshAll();
+}
+function resetModal() {
+  CURRENT_BOT_ID = null;
+  hideAlert();
+  $('botName').value = '';
+  $('apiId').value = '';
+  $('apiHash').value = '';
+  $('phone').value = '';
+  $('code').value = '';
+  $('pwd').value = '';
+  showStep('creds');
+}
+function showStep(name) {
+  ['Creds','Phone','Code','Pwd','Done'].forEach(n =>
+    $('step' + n).style.display = 'none');
+  $('step' + name.charAt(0).toUpperCase() + name.slice(1)).style.display = 'block';
+
+  // Stepper visual
+  $('step2').classList.remove('done','active');
+  $('step3').classList.remove('done','active');
+  if (name === 'phone') $('step2').classList.add('active');
+  if (name === 'code')  { $('step2').classList.add('done'); $('step3').classList.add('active'); }
+  if (name === 'pwd')   { $('step2').classList.add('done'); $('step3').classList.add('active'); }
+  if (name === 'done')  { $('step2').classList.add('done'); $('step3').classList.add('done'); }
+
+  // Title
+  const titles = {
+    creds: ['Сохтани боти нав', 'api_id, api_hash ва номи ботро ворид кунед.'],
+    phone: ['Рақами телефон', 'Бо коди кишвар, мисоли +992...'],
+    code:  ['Коди тасдиқ', 'Telegram ба ҳамин акаунт кодро фиристод.'],
+    pwd:   ['Пароли 2FA', 'Дар акаунт парол гузошта будед — ворид кунед.'],
+    done:  ['Тайёр', ''],
+  };
+  $('modalTitle').textContent = titles[name][0];
+  $('modalSub').textContent = titles[name][1];
+}
+
+function backToCreds() { showStep('creds'); }
+function backToPhone() { showStep('phone'); }
+
+// ===== Step 1: create =====
+async function submitCreds() {
+  hideAlert();
+  const name = $('botName').value.trim();
+  const apiId = $('apiId').value.trim();
+  const apiHash = $('apiHash').value.trim();
+  if (!name || !apiId || !apiHash) {
+    showAlert('Ҳамаи майдонҳоро пур кунед.');
+    return;
+  }
+  const btn = $('btnCreate');
+  setBtnLoading(btn, true, 'Месозам...');
+  try {
+    const r = await api('/api/bots', {
+      method: 'POST',
+      body: { name, api_id: Number(apiId), api_hash: apiHash },
+    });
+    CURRENT_BOT_ID = r.id;
+    showStep('phone');
+    setTimeout(() => $('phone').focus(), 80);
+    refreshAll();
+  } catch (e) {
+    showAlert(e.message);
+  } finally {
+    setBtnLoading(btn, false);
+  }
+}
+
+// ===== Step 2: send code =====
+async function submitPhone() {
+  hideAlert();
+  const phone = $('phone').value.trim();
+  if (!/^\+\d{7,15}$/.test(phone)) {
+    showAlert('Рақами нодуруст. Намуна: +992123456789');
+    return;
+  }
+  const btn = $('btnPhone');
+  setBtnLoading(btn, true, 'Мефиристам...');
+  try {
+    const r = await api(`/api/bots/${CURRENT_BOT_ID}/send-code`, {
+      method: 'POST', body: { phone },
+    });
+    if (r.already_authorized) {
+      // Сессия аллакай ҳаст — мустақим бот сохтан
+      toast('Акаунт аллакай ворид шуда буд. Бот сохта мешавад...');
+      // Бо як call ба finalize рафтан имконпазир нест, лозим аст code-ро мегузарем
+      // Аз нав login кунад: rerun send-code
+      // Дар ин ҳолат backend сессияро тоза мекунад ва қадами навбатиро code мепурсад
+      showAlert('Сессияи кӯҳна тоза карда мешавад. Лутфан code мунтазир шавед.');
+      // Боз як send-code (вале дар backend пеш сессияи кӯҳна агар authorized бошад - return шуд).
+      // Барои сода: мегӯем "ботро аз нав созед" — лекин беҳтараш аз UX, ҳамон сабт идома меравад.
+      // Файли ботро мустақим тавлид ва старт мекунем:
+      const r2 = await api(`/api/bots/${CURRENT_BOT_ID}/start`, { method:'POST' });
+      $('doneInfo').textContent = 'Бот аллакай ворид буд. Файл сохта ва оғоз шуд.';
+      showStep('done');
+      refreshAll();
+      return;
+    }
+    showStep('code');
+    setTimeout(() => $('code').focus(), 80);
+  } catch (e) {
+    showAlert(e.message);
+  } finally {
+    setBtnLoading(btn, false);
+  }
+}
+
+// ===== Step 3: verify code =====
+async function submitCode() {
+  hideAlert();
+  const code = $('code').value.trim().replace(/\s+/g,'');
+  if (!/^\d{4,7}$/.test(code)) {
+    showAlert('Коди нодуруст. 5–6 рақам.');
+    return;
+  }
+  const btn = $('btnCode');
+  setBtnLoading(btn, true, 'Месанҷам...');
+  try {
+    const r = await api(`/api/bots/${CURRENT_BOT_ID}/verify-code`, {
+      method: 'POST', body: { code },
+    });
+    if (r.step === 'password') {
+      showStep('pwd');
+      setTimeout(() => $('pwd').focus(), 80);
+    } else if (r.step === 'done') {
+      $('doneInfo').textContent = r.user
+        ? `Хуш омадед, ${r.user.first_name || r.user.username || 'корбар'}! Бот фаъол шуд.`
+        : 'Бот фаъол шуд.';
+      showStep('done');
+      refreshAll();
+    }
+  } catch (e) {
+    showAlert(e.message);
+  } finally {
+    setBtnLoading(btn, false);
+  }
+}
+
+// ===== Step 4: 2FA password =====
+async function submitPwd() {
+  hideAlert();
+  const password = $('pwd').value;
+  if (!password) {
+    showAlert('Лутфан паролро ворид кунед.');
+    return;
+  }
+  const btn = $('btnPwd');
+  setBtnLoading(btn, true, 'Ворид мешавам...');
+  try {
+    const r = await api(`/api/bots/${CURRENT_BOT_ID}/verify-password`, {
+      method: 'POST', body: { password },
+    });
+    if (r.step === 'done') {
+      $('doneInfo').textContent = r.user
+        ? `Хуш омадед, ${r.user.first_name || r.user.username || 'корбар'}! Бот фаъол шуд.`
+        : 'Бот фаъол шуд.';
+      showStep('done');
+      refreshAll();
+    }
+  } catch (e) {
+    showAlert(e.message);
+  } finally {
+    setBtnLoading(btn, false);
+  }
+}
+
+// ============================ List & actions ============================
+async function refreshAll() {
+  try {
+    const r = await api('/api/bots');
+    $('statTotal').textContent = r.summary.total;
+    $('statRunning').textContent = r.summary.running;
+    $('statStopped').textContent = r.summary.stopped;
+    $('statPending').textContent = r.summary.pending;
+    $('navBadge').textContent = r.summary.total;
+    renderBots(r.bots);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function renderBots(bots) {
+  const list = $('botList');
+  if (!bots.length) {
+    list.innerHTML = `
+      <div class="empty">
+        <div class="em-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        </div>
+        Ҳоло боте нест. Тугмаи «Иловаи бот»-ро пахш кунед.
+      </div>`;
+    return;
+  }
+  const search = ($('searchInput').value || '').toLowerCase();
+  list.innerHTML = bots
+    .filter(b => !search || (b.name||'').toLowerCase().includes(search) || (b.username||'').toLowerCase().includes(search))
+    .map(b => botCard(b)).join('');
+}
+
+function botCard(b) {
+  const initial = (b.name || '?').charAt(0).toUpperCase();
+  let pill = `<span class="pill pill-stopped">stopped</span>`;
+  if (b.status === 'running') pill = `<span class="pill pill-running">running</span>`;
+  else if (['pending','awaiting_code','awaiting_password'].includes(b.status))
+    pill = `<span class="pill pill-pending">${b.status}</span>`;
+
+  const subInfo = [
+    b.username ? '@' + b.username : null,
+    b.phone || null,
+    b.pid ? 'PID ' + b.pid : null,
+  ].filter(Boolean).join(' · ');
+
+  const actions = [];
+  if (b.status === 'running') {
+    actions.push(`<button class="btn btn-ghost btn-sm" onclick="botAction('${b.id}','stop')">⏸ Боздоштан</button>`);
+    actions.push(`<button class="btn btn-ghost btn-sm" onclick="botAction('${b.id}','restart')">↻ Restart</button>`);
+  } else if (b.status === 'authorized' || b.status === 'stopped') {
+    actions.push(`<button class="btn btn-primary btn-sm" onclick="botAction('${b.id}','start')">▶ Оғоз</button>`);
+  } else {
+    actions.push(`<button class="btn btn-primary btn-sm" onclick="continueLogin('${b.id}')">Идомаи login</button>`);
+  }
+  actions.push(`<button class="btn btn-ghost btn-sm" onclick="openLogs('${b.id}','${(b.name||'').replace(/'/g,"\\'")}')">📜 Logs</button>`);
+  actions.push(`<button class="btn btn-danger btn-sm" onclick="deleteBot('${b.id}')">✕</button>`);
+
+  return `
+    <div class="bot-card">
+      <div class="bot-avatar">${initial}</div>
+      <div class="bot-info">
+        <b>${escapeHtml(b.name || b.id)} ${pill}</b>
+        <small>${escapeHtml(subInfo || 'Сохта шуд: ' + (b.created_at||''))}</small>
+      </div>
+      <div class="bot-actions">${actions.join('')}</div>
+    </div>
+  `;
+}
+
+function escapeHtml(s) {
+  return String(s||'').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+async function botAction(id, action) {
+  try {
+    await api(`/api/bots/${id}/${action}`, { method: 'POST' });
+    toast('OK · ' + action);
+    refreshAll();
+  } catch (e) { toast(e.message, 'error'); }
+}
+
+async function deleteBot(id) {
+  if (!confirm('Боро ҳазф кардан? Сессия ва файл низ ҳазф мешаванд.')) return;
+  try {
+    await api(`/api/bots/${id}`, { method: 'DELETE' });
+    toast('Ҳазф шуд');
+    refreshAll();
+  } catch (e) { toast(e.message, 'error'); }
+}
+
+function continueLogin(id) {
+  CURRENT_BOT_ID = id;
+  resetModalKeepingId();
+  $('createModal').classList.add('open');
+  showStep('phone');
+  setTimeout(() => $('phone').focus(), 80);
+}
+function resetModalKeepingId() {
+  hideAlert();
+  $('phone').value = '';
+  $('code').value = '';
+  $('pwd').value = '';
+}
+
+// ============================ Logs ============================
+function openLogs(id, name) {
+  LOGS_BOT_ID = id;
+  $('logsTitle').textContent = 'Логҳо · ' + (name || id);
+  $('logsModal').classList.add('open');
+  loadLogs();
+}
+async function loadLogs() {
+  try {
+    const r = await api(`/api/bots/${LOGS_BOT_ID}/logs?lines=200`);
+    $('logsBox').textContent = r.log || '(холӣ)';
+    $('logsBox').scrollTop = $('logsBox').scrollHeight;
+  } catch (e) {
+    $('logsBox').textContent = 'Хато: ' + e.message;
+  }
+}
+$('btnRefreshLogs').addEventListener('click', loadLogs);
+
+// ============================ Wire up ============================
+$('searchInput').addEventListener('input', refreshAll);
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    $('createModal').classList.remove('open');
+    $('logsModal').classList.remove('open');
+  }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'f') {
+    e.preventDefault();
+    $('searchInput').focus();
+  }
+});
+
+// First load + auto-refresh
+refreshAll();
+setInterval(() => {
+  if (!$('createModal').classList.contains('open')) refreshAll();
+}, 5000);
+</script>
+
+</body>
+</html>

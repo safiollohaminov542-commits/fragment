@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Telethon sessions
+*.session
+*.session-journal
+
+# Runtime data
+app/sessions/
+app/logs/
+app/bots_registry.json
+
+# Generated bot directories (each <bot_id>/ subdir under app/users/)
+app/users/*/
+!app/users/main.py
+!app/users/main1.py
+!app/users/main2.py
+!app/users/__init__.py
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
